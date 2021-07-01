@@ -138,6 +138,53 @@ class PseudokuApplicationTests {
 		assertThat(actual).isFalse();
 	}
 
+	@Test
+	public void shoudldReturnFalseIfElemenetIsNotInAllFourVectorsInPuzzle() {
+		Vector<Integer> rows = new Vector<>();
+		rows.add(1);
+		rows.add(2);
+		rows.add(3);
+		rows.add(4);
+		var puzzle = Pseudoku.makeVector(rows);
+		puzzle.get(1).clear();
+
+		boolean actual = Pseudoku.checkColumn(puzzle, 4);
+
+		assertThat(actual).isFalse();
+	}
+
+	@Test
+	public void shouldReturnTrueIfAndOnlyIfAllNumbersAreInAllColumns() {
+		Vector<Integer> rows = new Vector<>();
+		rows.add(1);
+		rows.add(2);
+		rows.add(3);
+		rows.add(4);
+		var puzzle = Pseudoku.makeVector(rows);
+
+		boolean actual = Pseudoku.colCheck(puzzle);
+
+		assertThat(actual).isTrue();
+	}
+
+	@Test
+	public void shouldReturnFalseIfElementIsNotInOneVector() {
+		Vector<Integer> rows = new Vector<>();
+		rows.add(1);
+		rows.add(2);
+		rows.add(3);
+		rows.add(4);
+		var puzzle = Pseudoku.makeVector(rows);
+		puzzle.get(3).clear();
+		puzzle.get(3).add(1);
+		puzzle.get(3).add(2);
+		puzzle.get(3).add(3);
+
+		boolean actual = Pseudoku.colCheck(puzzle);
+
+		assertThat(actual).isFalse();
+	}
+
 	private Vector<Integer> buildExpected() {
 		Vector<Integer> rows = new Vector<>();
 		rows.add(3);

@@ -59,18 +59,28 @@ public class Pseudoku {
         return false;
     }
 
-    public static boolean checkColumn(Vector<Vector<Integer>> puzzle, int element) {
+    public static boolean checkColumn(Vector<Vector<Integer>> puzzle, int j) {
 
-        Vector<Integer> temp;
+        for (var i = 0; i <= 3; i++) {
 
-        for (var member : puzzle) {
-            temp = member;
-
-            var isElementFound = searchLinearly(temp, element);
+            var isElementFound = searchLinearly(puzzle.get(i), j);
             if (!isElementFound) {
                 return false;
             }
         }
+        return true;
+    }
+
+    public static boolean colCheck(Vector<Vector<Integer>> puzzle) {
+
+        for (var i = 0; i <= 3; i++) {
+            var isElementFound = checkColumn(puzzle, i+1);
+
+            if (!isElementFound) {
+                return false;
+            }
+        }
+
         return true;
     }
 }
