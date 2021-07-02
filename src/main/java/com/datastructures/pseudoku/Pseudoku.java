@@ -59,7 +59,7 @@ public class Pseudoku {
         return false;
     }
 
-    public static boolean checkColumn(Vector<Vector<Integer>> puzzle, int j) {
+    public static boolean checkRow(Vector<Vector<Integer>> puzzle, int j) {
 
         for (var i = 0; i <= 3; i++) {
 
@@ -71,16 +71,83 @@ public class Pseudoku {
         return true;
     }
 
-    public static boolean colCheck(Vector<Vector<Integer>> puzzle) {
+    public static boolean checkColumn2(Vector<Vector<Integer>> puzzle, int j) {
+        Vector<Vector<Integer>> temp = buildTempFromNumberAndPuzzle(j, puzzle);
 
         for (var i = 0; i <= 3; i++) {
-            var isElementFound = checkColumn(puzzle, i+1);
 
+            var isElementFound = searchLinearly(temp.get(0), j);
             if (!isElementFound) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public static boolean colCheck(Vector<Vector<Integer>> puzzle) {
+        boolean isElementFound;
+
+        for (var i = 0; i <= 3; i++) {
+
+            isElementFound = checkRow(puzzle, i+1);
+            if (!isElementFound) {
+                return false;
+            }
+
+            for (var j = 0; j <= 3; j++) {
+
+                isElementFound = checkRow(puzzle, j+1);
+                if (!isElementFound) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean checkGrid(Vector<Vector<Integer>> puzzle, int row1, int col1, int row2, int col2) {
+        return false;
+    }
+
+    public static boolean checkGrids(Vector<Vector<Integer>> puzzle) {
+
+        for (var i = 0; i <= 1; i++) {
+            for (var j = 0; j <= 1; j++) {
+                if (!checkGrid(puzzle, 1+2*i, 1+2*j, 2+2*i, 2+2*j)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static Vector<Vector<Integer>> makeSolution(Vector<Integer> rows) {
+        Vector<Vector<Integer>> puzzle = makeVector(rows);
+
+        var everySubgridContainEveryNumber = checkGrids(puzzle);
+        var everyColumnContainEveryNumber = colCheck(puzzle);
+
+//        while (!everySubgridContainEveryNumber || !everyColumnContainEveryNumber) {
+//            puzzle = permuteRow(puzzle, 1, 1, 1);
+//        }
+
+        return puzzle;
+    }
+
+    public static Vector<Vector<Integer>> buildTempFromNumberAndPuzzle(int j, Vector<Vector<Integer>> puzzle) {
+
+        var temp = new Vector<Vector<Integer>>();
+
+        for (var i = 0; i <= 3; i++) {
+            if (i+1 == j) {
+                temp.insertElementAt(puzzle.get(j-1), j-1);
+            } else {
+                temp.insertElementAt(puzzle.get(i), i);
+            }
+
+        }
+
+        return temp;
     }
 }

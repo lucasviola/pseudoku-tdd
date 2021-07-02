@@ -1,14 +1,11 @@
 package com.datastructures.pseudoku;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Queue;
 import java.util.Vector;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest
 class PseudokuApplicationTests {
 
 	@Test
@@ -85,7 +82,7 @@ class PseudokuApplicationTests {
 	}
 
 	@Test
-	public void shouldReturnTrueIfItemIsInVector() {
+	public void linearSearch_returnsTrueIfFindsItem() {
 		Vector<Integer> vector = new Vector<>();
 		vector.add(1);
 		vector.add(2);
@@ -98,7 +95,7 @@ class PseudokuApplicationTests {
 	}
 
 	@Test
-	public void shouldReturnTrFalseIfItemIsNotInVector() {
+	public void linearSearch_returnsFalseIfDoestNotFindItem() {
 		Vector<Integer> vector = new Vector<>();
 		vector.add(1);
 		vector.add(2);
@@ -113,15 +110,43 @@ class PseudokuApplicationTests {
 	@Test
 	public void shoudldReturnTrueIfElemenetIsInPuzzle() {
 		Vector<Integer> rows = new Vector<>();
-		rows.add(1);
 		rows.add(2);
-		rows.add(3);
 		rows.add(4);
+		rows.add(1);
+		rows.add(3);
 		var puzzle = Pseudoku.makeVector(rows);
 
-		boolean actual = Pseudoku.checkColumn(puzzle, 1);
+		boolean actual = Pseudoku.checkRow(puzzle, 1);
 
 		assertThat(actual).isTrue();
+	}
+
+	@Test
+	public void shouldBuildTemp() {
+		Vector<Vector<Integer>> puzzle = new Vector<>();
+		puzzle.add(buildRow(1, 2, 4, 3));
+		puzzle.add(buildRow(2, 4, 3, 1));
+		puzzle.add(buildRow(4, 1, 2, 3));
+		puzzle.add(buildRow(3, 2, 4, 1));
+		var j = 1;
+		var expectedTemp = new Vector<Vector<Integer>>();
+		expectedTemp.add(buildRow(1, 2, 4, 3));
+		expectedTemp.add(buildRow(2, 4, 3, 1));
+		expectedTemp.add(buildRow(4, 1, 2, 3));
+		expectedTemp.add(buildRow(3, 2, 4, 1));
+
+		Vector<Vector<Integer>> actualTemp = Pseudoku.buildTempFromNumberAndPuzzle(j, puzzle);
+
+		assertThat(actualTemp).isEqualTo(expectedTemp);
+	}
+
+	private Vector<Integer> buildRow(int i, int i1, int i2, int i3) {
+		var row = new Vector<Integer>();
+		row.add(i);
+		row.add(i1);
+		row.add(i2);
+		row.add(i3);
+		return row;
 	}
 
 	@Test
@@ -133,22 +158,21 @@ class PseudokuApplicationTests {
 		rows.add(3);
 		var puzzle = Pseudoku.makeVector(rows);
 
-		boolean actual = Pseudoku.checkColumn(puzzle, 4);
+		boolean actual = Pseudoku.checkRow(puzzle, 4);
 
 		assertThat(actual).isFalse();
 	}
 
 	@Test
-	public void shoudldReturnFalseIfElemenetIsNotInAllFourVectorsInPuzzle() {
+	public void shoudldReturnFalseIfElemenetIsNotInRow() {
 		Vector<Integer> rows = new Vector<>();
 		rows.add(1);
 		rows.add(2);
 		rows.add(3);
-		rows.add(4);
+		rows.add(0);
 		var puzzle = Pseudoku.makeVector(rows);
-		puzzle.get(1).clear();
 
-		boolean actual = Pseudoku.checkColumn(puzzle, 4);
+		boolean actual = Pseudoku.checkRow(puzzle, 4);
 
 		assertThat(actual).isFalse();
 	}
@@ -184,6 +208,37 @@ class PseudokuApplicationTests {
 
 		assertThat(actual).isFalse();
 	}
+
+	@Test
+	public void shouldReturnTrueIf2By2SubgridContainsAllNumbersFromOneToFour() {
+		Vector<Integer> rows = new Vector<>();
+		rows.add(1);
+		rows.add(2);
+		rows.add(3);
+		rows.add(4);
+		var puzzle = Pseudoku.makeVector(rows);
+
+		boolean actual = Pseudoku.checkGrid(puzzle, 1, 1, 2, 2);
+	}
+
+//	@Test
+//	public void shouldReturnSolvedPuzzle() {
+//		Vector<Integer> rows = new Vector<>();
+//		rows.add(1);
+//		rows.add(2);
+//		rows.add(3);
+//		rows.add(4);
+//		Vector<Integer> expected = new Vector<>();
+//		expected.add(3);
+//		expected.add(2);
+//		expected.add(4);
+//		expected.add(1);
+//
+//		Vector<Vector<Integer>> solution = Pseudoku.makeSolution(rows);
+//
+//		assertThat(solution).isEqualTo(expected);
+//	}
+
 
 	private Vector<Integer> buildExpected() {
 		Vector<Integer> rows = new Vector<>();
