@@ -107,7 +107,21 @@ public class Pseudoku {
     }
 
     public static boolean checkGrid(Vector<Vector<Integer>> puzzle, int row1, int col1, int row2, int col2) {
-        return false;
+        for (var i = row1; i <= row2; i++) {
+            var checkRows = checkRow(puzzle, i);
+            if (!checkRows) {
+                return false;
+            }
+
+            for (var j = col1; j <= col2; j++) {
+                var checkColumns = colCheck(puzzle);
+                if (!checkColumns) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public static boolean checkGrids(Vector<Vector<Integer>> puzzle) {

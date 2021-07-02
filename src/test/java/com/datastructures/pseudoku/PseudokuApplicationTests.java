@@ -150,7 +150,7 @@ class PseudokuApplicationTests {
 	}
 
 	@Test
-	public void shoudldReturnFalseIfElemenetIsNotInPuzzle() {
+	public void shoudldReturnFalseIfElementIsnotinRow() {
 		Vector<Integer> rows = new Vector<>();
 		rows.add(1);
 		rows.add(2);
@@ -178,7 +178,7 @@ class PseudokuApplicationTests {
 	}
 
 	@Test
-	public void shouldReturnTrueIfAndOnlyIfAllNumbersAreInAllColumns() {
+	public void shouldReturnTrueIfAndOnlyIfAllNumbersFromOneToFourAreInColumnAndRow() {
 		Vector<Integer> rows = new Vector<>();
 		rows.add(1);
 		rows.add(2);
@@ -192,7 +192,7 @@ class PseudokuApplicationTests {
 	}
 
 	@Test
-	public void shouldReturnFalseIfElementIsNotInOneVector() {
+	public void shouldReturnFalseIfElementIsNotInPuzzle() {
 		Vector<Integer> rows = new Vector<>();
 		rows.add(1);
 		rows.add(2);
@@ -212,13 +212,15 @@ class PseudokuApplicationTests {
 	@Test
 	public void shouldReturnTrueIf2By2SubgridContainsAllNumbersFromOneToFour() {
 		Vector<Integer> rows = new Vector<>();
-		rows.add(1);
-		rows.add(2);
-		rows.add(3);
-		rows.add(4);
-		var puzzle = Pseudoku.makeVector(rows);
+		Vector<Vector<Integer>> puzzle = new Vector<>();
+		puzzle.add(buildRow(1, 2, 0, 0));
+		puzzle.add(buildRow(3, 4, 0, 0));
+		puzzle.add(buildRow(0, 0, 0, 0));
+		puzzle.add(buildRow(0, 0, 0, 0));
 
 		boolean actual = Pseudoku.checkGrid(puzzle, 1, 1, 2, 2);
+
+		assertThat(actual).isEqualTo(true);
 	}
 
 //	@Test
