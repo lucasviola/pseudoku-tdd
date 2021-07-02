@@ -211,7 +211,6 @@ class PseudokuApplicationTests {
 
 	@Test
 	public void shouldReturnTrueIf2By2SubgridContainsAllNumbersFromOneToFour() {
-		Vector<Integer> rows = new Vector<>();
 		Vector<Vector<Integer>> puzzle = new Vector<>();
 		puzzle.add(buildRow(1, 2, 0, 0));
 		puzzle.add(buildRow(3, 4, 0, 0));
@@ -223,23 +222,62 @@ class PseudokuApplicationTests {
 		assertThat(actual).isEqualTo(true);
 	}
 
-//	@Test
-//	public void shouldReturnSolvedPuzzle() {
-//		Vector<Integer> rows = new Vector<>();
-//		rows.add(1);
-//		rows.add(2);
-//		rows.add(3);
-//		rows.add(4);
-//		Vector<Integer> expected = new Vector<>();
-//		expected.add(3);
-//		expected.add(2);
-//		expected.add(4);
-//		expected.add(1);
-//
-//		Vector<Vector<Integer>> solution = Pseudoku.makeSolution(rows);
-//
-//		assertThat(solution).isEqualTo(expected);
-//	}
+	@Test
+	public void shouldReturnFalseIf2By2SubgridDoesNotContainAllNumbersFromOneToFour() {
+		Vector<Vector<Integer>> puzzle = new Vector<>();
+		puzzle.add(buildRow(1, 0, 0, 0));
+		puzzle.add(buildRow(3, 4, 0, 0));
+		puzzle.add(buildRow(0, 0, 0, 0));
+		puzzle.add(buildRow(0, 0, 0, 0));
+
+		boolean actual = Pseudoku.checkGrid(puzzle, 1, 1, 2, 2);
+
+		assertThat(actual).isEqualTo(false);
+	}
+
+	@Test
+	public void shouldReturnTrueIfAllSubGridsContainAllNumbersFromOneToFour() {
+		Vector<Vector<Integer>> puzzle = new Vector<>();
+		puzzle.add(buildRow(1, 2, 4, 3));
+		puzzle.add(buildRow(2, 4, 3, 1));
+		puzzle.add(buildRow(4, 1, 2, 3));
+		puzzle.add(buildRow(3, 2, 4, 1));
+
+		boolean actual = Pseudoku.checkGrids(puzzle);
+
+		assertThat(actual).isEqualTo(true);
+	}
+
+	@Test
+	public void shouldReturnFalseIfNotAllSubGridsContainAllNumbersFromOneToFour() {
+		Vector<Vector<Integer>> puzzle = new Vector<>();
+		puzzle.add(buildRow(1, 2, 4, 3));
+		puzzle.add(buildRow(2, 4, 3, 1));
+		puzzle.add(buildRow(4, 1, 2, 3));
+		puzzle.add(buildRow(3, 2, 4, 4));
+
+		boolean actual = Pseudoku.checkGrids(puzzle);
+
+		assertThat(actual).isEqualTo(false);
+	}
+
+	@Test
+	public void shouldReturnSolvedPuzzle() {
+		Vector<Integer> rows = new Vector<>();
+		rows.add(1);
+		rows.add(2);
+		rows.add(3);
+		rows.add(4);
+		Vector<Vector<Integer>> expectedPuzzle = new Vector<>();
+		expectedPuzzle.add(buildRow(1, 2, 3, 4));
+		expectedPuzzle.add(buildRow(1, 2, 3, 4));
+		expectedPuzzle.add(buildRow(1, 2, 3, 4));
+		expectedPuzzle.add(buildRow(1, 2, 3, 4));
+
+		Vector<Vector<Integer>> solution = Pseudoku.makeSolution(rows);
+
+		assertThat(solution).isEqualTo(expectedPuzzle);
+	}
 
 
 	private Vector<Integer> buildExpected() {

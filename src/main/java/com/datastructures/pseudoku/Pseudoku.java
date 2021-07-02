@@ -107,21 +107,18 @@ public class Pseudoku {
     }
 
     public static boolean checkGrid(Vector<Vector<Integer>> puzzle, int row1, int col1, int row2, int col2) {
-        for (var i = row1; i <= row2; i++) {
-            var checkRows = checkRow(puzzle, i);
-            if (!checkRows) {
-                return false;
-            }
-
-            for (var j = col1; j <= col2; j++) {
-                var checkColumns = colCheck(puzzle);
-                if (!checkColumns) {
-                    return false;
+        var count = 0;
+        for (var i = row1-1; i <= row2-1; i++) {
+            for (var j = col1-1; j <= col2-1; j++) {
+                if (puzzle.get(i).get(j) == 1
+                        || puzzle.get(i).get(j) == 2
+                        || puzzle.get(i).get(j) == 3
+                        || puzzle.get(i).get(j) == 4) {
+                    count++;
                 }
             }
         }
-
-        return true;
+        return count == 4;
     }
 
     public static boolean checkGrids(Vector<Vector<Integer>> puzzle) {
@@ -142,10 +139,16 @@ public class Pseudoku {
         var everySubgridContainEveryNumber = checkGrids(puzzle);
         var everyColumnContainEveryNumber = colCheck(puzzle);
 
-//        while (!everySubgridContainEveryNumber || !everyColumnContainEveryNumber) {
-//            puzzle = permuteRow(puzzle, 1, 1, 1);
-//        }
+        while (!everySubgridContainEveryNumber || !everyColumnContainEveryNumber) {
 
+            puzzle = permuteRow(puzzle, 1, 1, 1);
+
+            for (var i = 1; i <= 4; i++) {
+                if (!checkRow(puzzle, i)) {
+                    puzzle = permuteRow(puzzle, i, i, i);
+                }
+            }
+        }
         return puzzle;
     }
 
